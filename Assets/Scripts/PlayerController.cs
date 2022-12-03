@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public static bool spawnNextBall;
 
     public static int score = 0;
+    
     public static int highScore = 0;
 
     [SerializeField]

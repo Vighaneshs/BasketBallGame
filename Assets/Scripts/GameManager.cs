@@ -72,8 +72,11 @@ public class GameManager : MonoBehaviour
             {
                 Destroy(nextBall);
             }
-            highScore.value = PlayerController.score;
-            SaveIntoJson();
+            if (PlayerController.highScore > highScore.value)
+            {
+                highScore.value = PlayerController.score;
+                SaveIntoJson();
+            }
             restartBtn.onClick.AddListener(RestartGame);
             restartBtn.gameObject.SetActive(true);
             Vector3 bgFinal = initBgPos;
