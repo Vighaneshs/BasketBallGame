@@ -7,12 +7,6 @@ using TMPro;
 public class PlayerController : MonoBehaviour
 {
 
-    //TODO: Time, score, reset, button, sound;
-    //TODO: Scored bool to score 1 point in one chance
-
-    //IF TIME
-    //TODO: Multiple balls at once throwable
-    //TODO: ball bounce from with each oother, Velocity normal to hit point using raycasthit.normal
 
     [SerializeField]
     private GameObject basket;
@@ -122,7 +116,7 @@ public class PlayerController : MonoBehaviour
             transform.position += initVelocity * Time.deltaTime;
             initVelocity -= gravityAccel * Time.deltaTime;
 
-            if (timePassed >= projectileTime) ballShot = false;
+            //if (timePassed >= projectileTime) ballShot = false;
         }
        
     }
@@ -136,21 +130,36 @@ public class PlayerController : MonoBehaviour
         RaycastHit hitInfo;
         if (Physics.Raycast(forwardRay, out hitInfo, ballCollider.bounds.extents.z))
         {
-            if (!hitInfo.collider.CompareTag("Net")) initVelocity.z = -initVelocity.z*boardBounceFactor;
+            if (!hitInfo.collider.CompareTag("Net")) initVelocity = (hitInfo.normal.normalized)* initVelocity.magnitude * boardBounceFactor;
+            if (hitInfo.collider.CompareTag("Player"))
+            {
+                hitInfo.collider.gameObject.GetComponent<PlayerController>().initVelocity += initVelocity/2;
+                initVelocity -= initVelocity / 2;
+            }
         }
 
         Origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         Ray backwardRay = new Ray(Origin, -transform.forward);
         if (Physics.Raycast(backwardRay, out hitInfo, ballCollider.bounds.extents.z))
         {
-            if (!hitInfo.collider.CompareTag("Net")) initVelocity.z = -initVelocity.z*boardBounceFactor;
+            if (!hitInfo.collider.CompareTag("Net")) initVelocity = (hitInfo.normal.normalized) * initVelocity.magnitude * boardBounceFactor;
+            if (hitInfo.collider.CompareTag("Player"))
+            {
+                hitInfo.collider.gameObject.GetComponent<PlayerController>().initVelocity -= initVelocity / 2;
+                initVelocity += initVelocity / 2;
+            }
         }
 
         Origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
         Ray UpRay = new Ray(Origin, transform.up);
         if (Physics.Raycast(UpRay, out hitInfo, ballCollider.bounds.extents.y))
         {
-            if (!hitInfo.collider.CompareTag("Net")) initVelocity.y = -initVelocity.y;
+            if (!hitInfo.collider.CompareTag("Net")) initVelocity = (hitInfo.normal.normalized) * initVelocity.magnitude * boardBounceFactor;
+            if (hitInfo.collider.CompareTag("Player"))
+            {
+                hitInfo.collider.gameObject.GetComponent<PlayerController>().initVelocity += initVelocity / 2;
+                initVelocity -= initVelocity / 2;
+            }
         }
 
         Origin = new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -166,11 +175,17 @@ public class PlayerController : MonoBehaviour
                     highScore = score;
                 }
             }
+            if (hitInfo.collider.CompareTag("Player"))
+            {
+                hitInfo.collider.gameObject.GetComponent<PlayerController>().initVelocity -= initVelocity / 2;
+                initVelocity += initVelocity / 2;
+            }
             if (hitInfo.collider.CompareTag("Floor"))
             {
                 ballShot = false;
                 Destroy(gameObject);
             }
+            else if (!hitInfo.collider.CompareTag("Net")) initVelocity = (hitInfo.normal.normalized) * initVelocity.magnitude * boardBounceFactor;
 
         }
     }

@@ -31,6 +31,9 @@ public class GameManager : MonoBehaviour
     HighScore highScore = new HighScore();
     private bool firstShot;
 
+    // 1 is for running game
+    // 0 is for ended or not started    
+    public static int gameState  = 0;
 
 
     public void initScene()
@@ -41,6 +44,7 @@ public class GameManager : MonoBehaviour
         totalTimeLeft = totalTime;
         background.transform.position = initBgPos;
         firstShot = true;
+        gameState = 1;
     }
 
     void Start()
@@ -82,6 +86,7 @@ public class GameManager : MonoBehaviour
             Vector3 bgFinal = initBgPos;
             bgFinal.z -= 10;
             background.transform.position = bgFinal;
+            gameState = 0;
         }
         else
         {
