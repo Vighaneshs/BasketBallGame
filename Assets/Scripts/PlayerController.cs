@@ -30,7 +30,6 @@ public class PlayerController : MonoBehaviour
     private WaitForFixedUpdate waitForFixedUpdate = new WaitForFixedUpdate();
 
     private bool isBallTouched = false;
-    private bool isOnGround = true;
     private bool ballShot = false;
     private bool touchStarted = false;
     private bool scored = false;
